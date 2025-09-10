@@ -1,33 +1,47 @@
-import jwt from "jsonwebtoken"
+import jwt, { type JwtPayload } from "jsonwebtoken"
 import User from "../models/userModel.ts"
-import  asyncHandler , {type Props} from "./asyncHandler.ts"
+import asyncHandler from "./asyncHandler.ts"
+import type { NextFunction, Request, Response } from "express";
 
-const authenticate = asyncHandler(async(req,res,next)=>{
-    let token;
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: any; 
+    }
+  }
+}
+
+const authenticate = asyncHandler(async (req, res, next) => {
+    let token: string | undefined;
     token = req.cookies.jwt
 
-    if(token){
+    if (token) {
         try {
-            const decoded = jwt.verify(token,process.env.JWT_SECRET!)
-            req.body.user = await User.findById(decoded)
-            next() 
+            const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload
+           
+           
+            req.user = await User.findById(decoded.userId).select("-password")
+           
             
+            next()
+
         } catch (error) {
             throw new Error("Not authorized ,token failed")
         }
-    }else{
+    } else {
         res.status(401)
         throw new Error("Not authorized , no token")
     }
 })
 
-const authorizedAdmin = ({req,res,next}:Props)=>{
-    if(req.body.user && req.body.user.isAdmin){
+const authorizedAdmin = (req: Request, res: Response, next: NextFunction) => {
+    if (req.user && req.user.isAdmin) {
         next()
 
-    }else{
+    } else {
         res.status(401).send("Not authorized as an admin")
     }
 }
 
-export {authenticate , authorizedAdmin}
+export { authenticate, authorizedAdmin }
