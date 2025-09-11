@@ -5,6 +5,7 @@ import Loader from "../../components/Loader";
 import { useLoginMutation } from "../../redux/api/usersApiSlice";
 import { setCredentials } from "../../redux/features/auth/authSlice";
 import { toast } from "react-toastify";
+import type {  MyAPIError, RootState } from "../../types/main";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -15,37 +16,39 @@ const Login = () => {
 
   const [login, { isLoading }] = useLoginMutation();
 
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector((state:RootState) => state.auth);
 
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
   const redirect = sp.get("redirect") || "/";
 
-  useEffect(() => {
+  useEffect(() => { 
     if (userInfo) {
       navigate(redirect);
     }
   }, [navigate, redirect, userInfo]);
 
-  const submitHandler = async (e) => {
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const res = await login({ email, password }).unwrap();
       console.log(res);
       dispatch(setCredentials({ ...res }));
       navigate(redirect);
-    } catch (err:any) {
-      toast.error(err?.data?.message || err.error);
+    } catch (err   ) {
+     const APIError = err as MyAPIError
+      toast.error(APIError?.data?.message || APIError.error);
     }
   };
 
   return (
     <div>
-      <section className="pl-[10rem] flex flex-wrap">
-        <div className="mr-[4rem] mt-[5rem]">
+      <section className="w-[100%] absolute top-1/2 translate-y-[-50%] flex  justify-center md:justify-between pl-[8%] pr-[2%] items-center  ">
+
+        <div className=" h-fit w-[max(30%,300px)]  ">
           <h1 className="text-2xl font-semibold mb-4">Sign In</h1>
 
-          <form onSubmit={submitHandler} className="container w-[40rem]">
+          <form onSubmit={submitHandler} className="container w-[100%]">
             <div className="my-[2rem]">
               <label
                 htmlFor="email"
@@ -103,11 +106,13 @@ const Login = () => {
             </p>
           </div>
         </div>
+
         <img
           src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1964&q=80"
           alt=""
-          className="h-[65rem] w-[59%] xl:block md:hidden sm:hidden rounded-lg"
+          className=" w-[45%] hidden h-[95dvh] md:block rounded-lg"
         />
+        
       </section>
     </div>
   );

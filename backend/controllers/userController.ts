@@ -40,6 +40,8 @@ const createUser = asyncHandler(async (req, res) => {
 });
 
 const loginUser = asyncHandler(async (req, res) => {
+    
+    
     const { email, password }:{password:string;email:string} = req.body;
 
     
@@ -51,7 +53,8 @@ const loginUser = asyncHandler(async (req, res) => {
             password,
             existingUser.password as string
         );
-
+         
+            
         if (isPasswordValid) {
             createToken(res, String(existingUser._id));
 
@@ -62,6 +65,8 @@ const loginUser = asyncHandler(async (req, res) => {
                 isAdmin: existingUser.isAdmin,
             });
             return;
+        }else{
+            res.status(405).json({message:"Not A valid Password or Email"})
         }
     }
 });

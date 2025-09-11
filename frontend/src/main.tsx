@@ -1,47 +1,41 @@
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App.jsx";
+import { Provider } from "react-redux";
+import store from "./redux/store";
+import { Route, RouterProvider, createRoutesFromElements } from "react-router";
+import { createBrowserRouter } from "react-router-dom";
 
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+import PrivateRoute from "./components/PrivateRoute";
 
-// import ReactDom from "react-dom"
-import  { Provider } from 'react-redux'
-import store from "./redux/store.ts";
-import {Route,RouterProvider , createRoutesFromElements} from "react-router"
-import { createBrowserRouter } from 'react-router'
+// Auth
+import Login from "./pages/Auth/Login";
+import Register from "./pages/Auth/Register";
 
-import PrivateRoute from './components/PrivateRoute.tsx'
-
-import Login from './pages/Auth/Login.tsx'
-import Register from './pages/Auth/Register.tsx'
-
-import AdminRoute from './pages/Admin/AdminRoute.tsx'
-import Profile from './pages/User/Profile.tsx'
-import UserList from './pages/Admin/UserList.tsx'
+import AdminRoute from "./pages/Admin/AdminRoute";
+import Profile from "./pages/User/Profile";
+import UserList from "./pages/Admin/UserList";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path='/' element={<App />} >
+    <Route path="/" element={<App />}>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
 
-      <Route path='login' element={<Login />} />
-      <Route path='register' element={<Register />} />
-
-      <Route path='' element={<PrivateRoute />} >
-      <Route path='/profile' element={<Profile />} />
+      {/* Registered users */}
+      <Route path="" element={<PrivateRoute />}>
+        <Route path="/profile" element={<Profile />} />
       </Route>
 
-      <Route path='admin' element={<AdminRoute />} >
-      <Route path='userlist' element={<UserList />} />
+      <Route path="/admin" element={<AdminRoute />}>
+        <Route path="userlist" element={<UserList />} />
       </Route>
-
-
     </Route>
-
   )
-)
+);
 
-createRoot(document.getElementById('root')!).render(
- <Provider store={store}>
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <Provider store={store}>
     <RouterProvider router={router} />
-
- </Provider>
-)
+  </Provider>
+);

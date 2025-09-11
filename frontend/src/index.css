@@ -1,5 +1,15 @@
 @import "tailwindcss";
+@tailwind utilities;
+
 @custom-variant dark (&:where(.dark, .dark *));
 
+body {
+  background: #1d1d1d;
+  color: #fff;
+}
 
+input,
+textarea {
 
+  border: #fff 1px solid;
+}
