@@ -5,11 +5,20 @@ import cookieParser from "cookie-parser"
 import {connectDB} from "./config/db.ts"
 import userRouter from "./routes/userRoutes.ts";
 
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: any; 
+    }
+  }
+}
+
+dotenv.config()
 console.clear()
 
 console.log("Hello Abdelwahab");
 
-dotenv.config()
 const port :string = process.env.PORT || "5000"
 
 const db = connectDB()

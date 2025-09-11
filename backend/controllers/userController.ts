@@ -76,15 +76,13 @@ const logoutCurrentUser = asyncHandler(async (req, res) => {
 });
 
 const getAllUsers = asyncHandler(async (req, res) => {
+    
+    
     const users = await User.find({});
     res.json(users);
 });
 
 const getCurrentUserProfile = asyncHandler(async (req, res) => {
-    console.clear()
-    console.log(req);
-    res.send(req)
-    return
     
     const user = await User.findById(req.user._id);
 
@@ -106,6 +104,9 @@ const updateCurrentUserProfile = asyncHandler(async (req, res) => {
     if (user) {
         user.username = req.body.username || user.username;
         user.email = req.body.email || user.email;
+        // user.isAdmin = req.body.isAdmin ?? user.isAdmin;
+       
+        
 
         if (req.body.password) {
             const salt = await bcrypt.genSalt(10);
@@ -157,6 +158,8 @@ const getUserById = asyncHandler(async (req, res) => {
 
 const updateUserById = asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
+   
+    
 
     if (user) {
         user.username = req.body.username || user.username;

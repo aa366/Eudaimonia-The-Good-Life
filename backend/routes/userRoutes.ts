@@ -26,7 +26,7 @@ router
 
 
 router
-    .route("profile")
+    .route("/profile")
     .get(authenticate,getCurrentUserProfile)
     .put(authenticate,updateCurrentUserProfile)
 

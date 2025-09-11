@@ -4,13 +4,6 @@ import asyncHandler from "./asyncHandler.ts"
 import type { NextFunction, Request, Response } from "express";
 
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: any; 
-    }
-  }
-}
 
 const authenticate = asyncHandler(async (req, res, next) => {
     let token: string | undefined;
@@ -22,6 +15,8 @@ const authenticate = asyncHandler(async (req, res, next) => {
            
            
             req.user = await User.findById(decoded.userId).select("-password")
+        
+            
            
             
             next()
