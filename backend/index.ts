@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser"
 // customs 
 import {connectDB} from "./config/db.ts"
 import userRouter from "./routes/userRoutes.ts";
-
+import categoryRoutes from "./routes/categoryRoutes.ts";
 
 declare global {
   namespace Express {
@@ -30,6 +30,7 @@ app.use(express.urlencoded({extended:true}))
 app.use(cookieParser())
 
 app.use("/api/users" , userRouter)
+app.use("/api/category" , categoryRoutes)
 
 app.listen(port, ()=> 
     console.log(`server running ${port}`)
