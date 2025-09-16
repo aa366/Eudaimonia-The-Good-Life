@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { FaTimes } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
 
 const AdminMenu = () => {
   const items = [
@@ -17,33 +17,29 @@ const AdminMenu = () => {
   };
 
   return (
-    <>
+    <div className=" relative">
       <button
-        className={`${
-          isMenuOpen ? "top-2 right-2" : "top-5 right-7"
-        } bg-[#151515] p-2 fixed rounded-lg`}
+        className={` text-2xl bg-[#151515] p-2  rounded-lg cursor-pointer`}
         onClick={toggleMenu}
       >
         {isMenuOpen ? (
           <FaTimes color="white" />
         ) : (
           <>
-            <div className="w-6 h-0.5 bg-gray-200 my-1"></div>
-            <div className="w-6 h-0.5 bg-gray-200 my-1"></div>
-            <div className="w-6 h-0.5 bg-gray-200 my-1"></div>
+           <FaBars  color="white"/>
           </>
         )}
       </button>
 
       {isMenuOpen && (
-        <section className="bg-[#151515] p-4 fixed right-7 top-5">
+        <section className="bg-[#151515] p-4 absolute right-0 ">
 
-          <ul className="list-none mt-2">
+          <ul className="list-none mt-2 ">
            
            {items.map((ele,idx)=>(
              <li key={idx + ele.href}>
               <NavLink
-                className=" py-2 px-3 block mb-5 hover:bg-[#2E2D2D] rounded-sm"
+                className=" py-2 px-3 block mb-5 hover:bg-[#2E2D2D] rounded-sm  whitespace-nowrap"
                 to={ele.href}
                 style={({ isActive }) => ({
                   color: isActive ? "greenyellow" : "white",
@@ -57,7 +53,7 @@ const AdminMenu = () => {
           </ul>
         </section>
       )}
-    </>
+    </div>
   );
 };
 
